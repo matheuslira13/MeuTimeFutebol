@@ -33,7 +33,7 @@ const Countries = ({ countries }: any) => {
         {countries &&
           getFilter(countries.response).map((item: any, index: any) => {
             return (
-              <Link key={index} href="/">
+              <Link key={index} href={`/leagues/${item.name}`}>
                 <div className={styles.subContainerCarrosel}>
                   <h6>{item.name}</h6>
                   <img src={item.flag} className={styles.imgFlag} />
@@ -42,6 +42,7 @@ const Countries = ({ countries }: any) => {
             );
           })}
       </div>
+      <button onClick={() => console.log(countries)}>TEste</button>
     </section>
   );
 };
@@ -51,7 +52,6 @@ export default Countries;
 export async function getServerSideProps() {
   const res = await fetch("http://localhost:3000/api/countries");
   const json = await res.json();
-  console.log("aquii", json);
   return {
     props: {
       countries: json.countries || null,
