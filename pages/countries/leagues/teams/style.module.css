@@ -1,0 +1,40 @@
+.containerTeams {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  margin-top: 100px;
+}
+.flag {
+  width: 250px;
+  height: 150px;
+  margin-bottom: 20px;
+}
+.bold {
+  font-weight: bold;
+}
+.containerResumeInformationCountrie {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+.subContainerTeams {
+  display: flex;
+  width: 75vw;
+  flex-wrap: wrap;
+}
+
+.containerItemTeam {
+  text-align: center;
+  margin: 5px;
+  transition: all ease 0.3s;
+}
+.containerItemTeam:hover {
+  transform: scale(1.3);
+}

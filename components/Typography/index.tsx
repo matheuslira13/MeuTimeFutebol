@@ -4,7 +4,9 @@ import { TypographyProps } from "./_types";
 export const Typography = ({
   children,
   type,
-  color = "black",
+  color = "white",
+  bold,
+  orientation = "inherit",
 }: TypographyProps) => {
   let fontSize = {
     "48": { style: "48px" },
@@ -27,7 +29,14 @@ export const Typography = ({
   }[color];
 
   return (
-    <p className={selectColor.style} style={{ fontSize: `${fontSize.style}` }}>
+    <p
+      className={selectColor.style}
+      style={{
+        fontSize: `${fontSize.style}`,
+        fontWeight: `${bold}`,
+        textAlign: `${orientation}`,
+      }}
+    >
       {children}
     </p>
   );
