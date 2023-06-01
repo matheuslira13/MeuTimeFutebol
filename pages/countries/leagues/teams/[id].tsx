@@ -45,7 +45,7 @@ const Teams = () => {
     try {
       /* const params = req.query; */
       const myHeaders = new Headers();
-      myHeaders.append("x-rapidapi-key", apiKey);
+      myHeaders.append("x-rapidapi-key", apiKey as string);
       myHeaders.append("x-rapidapi-host", apiHost);
 
       const requestOptions = {

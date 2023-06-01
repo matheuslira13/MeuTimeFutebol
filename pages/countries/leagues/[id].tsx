@@ -5,8 +5,12 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { Typography } from "../../../components/Typography";
 import ReactLoading from "react-loading";
+import axios from "axios";
+import { LeagueTypes } from "./_types";
+import { parseCookies } from "nookies";
+import Cookies from "js-cookie";
 
-const Leagues = ({ season }: any) => {
+const Leagues = ({ season }: { season: number[] }) => {
   useEffect(() => {
     const storageCountrieFlag = localStorage?.getItem("countrieFlag");
     setStorageCountrieFlag(storageCountrieFlag as string);
@@ -14,19 +18,19 @@ const Leagues = ({ season }: any) => {
   const [storageCountrieFlag, setStorageCountrieFlag] = useState("");
   const [countrieName, setCountrieName] = useState<string>("");
   const [seasonData, setSeasonData] = useState<string>("");
-  const [filtredLeague, setFiltredLeague] = useState<any>([]);
+  const [filtredLeague, setFiltredLeague] = useState<Array<LeagueTypes>>();
   const { query } = useRouter();
 
   const [loading, setLoading] = useState(true);
   const [start, setStart] = useState(false);
 
-  async function handler(item: string) {
+  async function getTeams(item: string) {
     setLoading(true);
     setStart(true);
     try {
       const params = query.id;
       const myHeaders = new Headers();
-      myHeaders.append("x-rapidapi-key", apiKey);
+      myHeaders.append("x-rapidapi-key", apiKey as string);
       myHeaders.append("x-rapidapi-host", apiHost);
       setCountrieName(query.id as string);
       setSeasonData(item);
@@ -59,6 +63,12 @@ const Leagues = ({ season }: any) => {
   ) => {
     localStorage.setItem("countrieName", countrieName);
     localStorage.setItem("seasonData", seasonData);
+    Cookies.set("seasonData", seasonData, { expires: 1, sameSite: "Strict" });
+    Cookies.set("countrieName", countrieName, {
+      expires: 1,
+      sameSite: "Strict",
+    });
+    Cookies.set("idLeague", idLeague, { expires: 1, sameSite: "Strict" });
     localStorage.setItem("idLeague", idLeague);
     localStorage.setItem("leagueName", leagueName);
   };
@@ -76,12 +86,12 @@ const Leagues = ({ season }: any) => {
       <Typography color="white" type="28">
         Selecione a temporada
       </Typography>
-      <select id="seasons">
-        {season.map((item: any, index: any) => {
+      <select id="seasons" className={styles.selecContainer}>
+        {season.map((item: number, index: number) => {
           return (
             <option
               key={index}
-              onClick={() => handler(item)}
+              onClick={() => getTeams(item.toString())}
               className={styles.containerLeagueItem}
             >
               {item}
@@ -91,20 +101,20 @@ const Leagues = ({ season }: any) => {
       </select>
       <div className={styles.subContainerLeague}>
         {filtredLeague &&
-          filtredLeague.map((item: any, index: any) => {
+          filtredLeague.map((item: LeagueTypes) => {
             return (
               <Link
-                key={index}
+                key={item.league.id}
                 onClick={() =>
                   guardParamsToTeams(
                     countrieName,
                     seasonData,
-                    item.league.id,
+                    item.league.id.toString(),
                     item.league.name
                   )
                 }
                 href={{
-                  pathname: `/countries/leagues/teams`,
+                  pathname: `/countries/leagues/teams/${countrieName}`,
                   query: {
                     countrieName,
                     seasonData,
@@ -130,7 +140,6 @@ const Leagues = ({ season }: any) => {
               </Link>
             );
           })}
-
         {start && (
           <ReactLoading
             type="cylon"
@@ -145,13 +154,16 @@ const Leagues = ({ season }: any) => {
 };
 export default Leagues;
 
-export async function getServerSideProps() {
-  const resSeasons = await fetch(`http://localhost:3000/api/seasons/`);
-  const jsonSeasons = await resSeasons.json();
+export async function getServerSideProps(context: any) {
+  const { apiKey } = parseCookies(context);
 
+  const resSeasons = await axios.get(`http://localhost:3000/api/seasons/`, {
+    headers: { "x-api-key": apiKey },
+  });
+  console.log("pegasus fantasy");
   return {
     props: {
-      season: jsonSeasons.countries.response,
+      season: resSeasons.data.season.response,
     },
   };
 }

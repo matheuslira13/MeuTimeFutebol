@@ -1,26 +1,28 @@
-import { apiBase, apiHost, apiKey } from "../../../lib/apiFootball";
+// pagina api next
+import axios from "axios";
+import { apiBase, apiHost } from "../../../lib/apiFootball";
+
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(
+export default async function getSeasons(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  try {
-    const myHeaders = new Headers();
-    myHeaders.append("x-rapidapi-key", apiKey);
-    myHeaders.append("x-rapidapi-host", apiHost);
+  const apiKey = req.headers["x-api-key"];
 
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
+  try {
+    const myHeaders = {
+      "x-rapidapi-key": apiKey,
+      "x-rapidapi-host": apiHost,
     };
 
-    const response = await fetch(
-      `${apiBase}/leagues/seasons`,
-      requestOptions
-    ).then((resp) => resp.json());
-    res.status(200).json({ countries: response });
+    const response = await axios.get(`${apiBase}/leagues/seasons`, {
+      headers: myHeaders,
+    });
+
+    res.status(200).json({ season: response.data });
   } catch (error) {
     console.log("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }

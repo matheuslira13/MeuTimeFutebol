@@ -1,12 +1,15 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { SetStateAction, useEffect, useState } from "react";
 import { apiBase, apiHost, apiKey } from "../../../../../lib/apiFootball";
 import styles from "./style.module.css";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Typography } from "../../../../../components/Typography";
+import { playerFake } from "../../../../test";
+import { PlayerType, StaticPlyerType } from "./_types";
 
 const Teams = () => {
-  const [teams, setTeams] = useState<any>("");
+  const [teams, setTeams] = useState<PlayerType[]>();
   const [imgTeam, setImgTeam] = useState<any>("");
   const router = useRouter();
   const { countrie, idLeague, seasonData, teamID } = router.query;
@@ -19,7 +22,7 @@ const Teams = () => {
     try {
       /* const params = req.query; */
       const myHeaders = new Headers();
-      myHeaders.append("x-rapidapi-key", apiKey);
+      myHeaders.append("x-rapidapi-key", apiKey as string);
       myHeaders.append("x-rapidapi-host", apiHost);
 
       const requestOptions = {
@@ -44,34 +47,30 @@ const Teams = () => {
 
   return (
     <div className={styles.containerTeams}>
-      <img src={imgTeam} />
+      <picture>
+        <img src={imgTeam} alt="img time" />
+      </picture>
       <Typography type="24" color="white">
         Jogadores do time{" "}
         <span className={styles.nameTeam}>{router?.query?.teamName}</span>
-        <div className={styles.teste}>
-          <h4>Nome do jogadoe bacana</h4>
-          <img
-            className={styles.testeImg}
-            src={
-              "https://www.imagensempng.com.br/wp-content/uploads/2021/07/Jogador-Png-1024x1024.png"
-            }
-          />
-        </div>
       </Typography>
       <div className={styles.subContainerTeams}>
         {teams &&
-          teams.map((item: any, index: any) => {
+          teams.map((item: PlayerType) => {
             return (
-              <div key={index} className={styles.brasaoContainer}>
+              <div key={item.player.id} className={styles.brasaoContainer}>
                 <Typography type="20" bold="bold" orientation="center">
                   {item.player.name}
                 </Typography>
                 <div className={styles.containerItemTeam}>
                   <div className={styles.containerResumedInfoPlayer}>
-                    <img
-                      className={styles.playerPhoto}
-                      src={item.player.photo}
-                    />
+                    <picture>
+                      <img
+                        alt="img jogador"
+                        className={styles.playerPhoto}
+                        src={item.player.photo}
+                      />
+                    </picture>
                     <div className={styles.detailsPlayerInfo}>
                       <span className={styles.space}>
                         <Typography type="16">
@@ -94,10 +93,13 @@ const Teams = () => {
                   {item?.statistics?.map((item: any, index: any) => {
                     return (
                       <div key={index} className={styles.leagueDetails}>
-                        <img
-                          className={styles.leaguePhoto}
-                          src={item.league.logo}
-                        />
+                        <picture>
+                          <img
+                            alt="img liga"
+                            className={styles.leaguePhoto}
+                            src={item.league.logo}
+                          />
+                        </picture>
                         <Typography type="16">
                           {" "}
                           {item?.league?.name} ano : {item?.league?.season}
@@ -128,13 +130,3 @@ const Teams = () => {
 };
 
 export default Teams;
-
-/* export const getStaticProps = async () => {
-  const resp = await fetch("http:localhost:3000/api/teams");
-  const data = await resp.json();
-  return {
-    props: {
-      teams: data,
-    },
-  };
-}; */
