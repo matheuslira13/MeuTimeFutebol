@@ -100,7 +100,6 @@ const Leagues = ({ season }: { season: number[] }) => {
           );
         })}
       </select>
-      <button onClick={() => console.log("aquiii", apiKey)}>teste</button>
       <div className={styles.subContainerLeague}>
         {filtredLeague &&
           filtredLeague.map((item: LeagueTypes) => {
@@ -162,7 +161,6 @@ export async function getServerSideProps(context: any) {
   const resSeasons = await axios.get(`http://localhost:3000/api/seasons/`, {
     headers: { "x-api-key": apiKey },
   });
-  console.log("pegasus fantasy");
   return {
     props: {
       season: resSeasons.data.season.response,

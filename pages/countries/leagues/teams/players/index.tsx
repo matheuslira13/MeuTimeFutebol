@@ -103,7 +103,6 @@ const Teams = () => {
                           {" "}
                           {item?.league?.name} ano : {item?.league?.season}
                         </Typography>
-                        teste
                         <Typography type="16">
                           Gols : {item?.goals.total}{" "}
                         </Typography>
