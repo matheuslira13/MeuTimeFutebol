@@ -8,7 +8,7 @@ import { CountriesType } from "./_types";
 //{ season }: { season: number[] }
 const Countries = ({ countries }: { countries: CountriesType[] }) => {
   const guardParamsToTeams = (countrieFlag: string) => {
-    localStorage.setItem("arrayCountries", countrieFlag);
+    localStorage.setItem("countrieFlag", countrieFlag);
   };
 
   const [search] = useState(["name"]);

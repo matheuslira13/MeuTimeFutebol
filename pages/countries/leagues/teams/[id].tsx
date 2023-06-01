@@ -1,13 +1,15 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { apiBase, apiHost, apiKey } from "../../../../lib/apiFootball";
+import { apiBase, apiHost } from "../../../../lib/apiFootball";
 import styles from "./style.module.css";
 import type { NextApiRequest, NextApiResponse } from "next";
 import Link from "next/link";
 import { Typography } from "../../../../components/Typography";
 import ReactLoading from "react-loading";
+import { parseCookies } from "nookies";
 
 const Teams = () => {
+  const { apiKey } = parseCookies();
   const router = useRouter();
   const [teams, setTeams] = useState<any>("");
   const [storageCountrieName, setStorageCountrieName] = useState<any>("");

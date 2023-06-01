@@ -1,14 +1,13 @@
 import { useRouter } from "next/router";
-import Image from "next/image";
-import { SetStateAction, useEffect, useState } from "react";
-import { apiBase, apiHost, apiKey } from "../../../../../lib/apiFootball";
+import { useEffect, useState } from "react";
+import { apiBase, apiHost } from "../../../../../lib/apiFootball";
 import styles from "./style.module.css";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { Typography } from "../../../../../components/Typography";
-import { playerFake } from "../../../../test";
 import { PlayerType, StaticPlyerType } from "./_types";
+import { parseCookies } from "nookies";
 
 const Teams = () => {
+  const { apiKey } = parseCookies();
   const [teams, setTeams] = useState<PlayerType[]>();
   const [imgTeam, setImgTeam] = useState<any>("");
   const router = useRouter();
@@ -122,9 +121,6 @@ const Teams = () => {
             );
           })}
       </div>
-
-      <button onClick={() => console.log(teams)}> aquiiii</button>
-      <button onClick={() => console.log(router.query)}> rotas</button>
     </div>
   );
 };

@@ -10,11 +10,9 @@ export const TextInput = ({
   hint,
   onkeyDonw,
 }: TextInputProps) => {
-  const [error, setError] = useState(hint);
   let legal = hint;
   const show = () => {
     legal = false;
-    console.log(hint);
   };
   return (
     <>

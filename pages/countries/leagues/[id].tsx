@@ -1,6 +1,6 @@
 import styles from "./style.module.css";
 import { useState, useEffect } from "react";
-import { apiBase, apiHost, apiKey } from "../../../lib/apiFootball";
+import { apiBase, apiHost } from "../../../lib/apiFootball";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Typography } from "../../../components/Typography";
@@ -11,6 +11,7 @@ import { parseCookies } from "nookies";
 import Cookies from "js-cookie";
 
 const Leagues = ({ season }: { season: number[] }) => {
+  const { apiKey } = parseCookies();
   useEffect(() => {
     const storageCountrieFlag = localStorage?.getItem("countrieFlag");
     setStorageCountrieFlag(storageCountrieFlag as string);
@@ -86,19 +87,20 @@ const Leagues = ({ season }: { season: number[] }) => {
       <Typography color="white" type="28">
         Selecione a temporada
       </Typography>
-      <select id="seasons" className={styles.selecContainer}>
+      <select
+        id="seasons"
+        className={styles.selecContainer}
+        onChange={(event) => getTeams(event.target.value)}
+      >
         {season.map((item: number, index: number) => {
           return (
-            <option
-              key={index}
-              onClick={() => getTeams(item.toString())}
-              className={styles.containerLeagueItem}
-            >
+            <option key={index} className={styles.containerLeagueItem}>
               {item}
             </option>
           );
         })}
       </select>
+      <button onClick={() => console.log("aquiii", apiKey)}>teste</button>
       <div className={styles.subContainerLeague}>
         {filtredLeague &&
           filtredLeague.map((item: LeagueTypes) => {
